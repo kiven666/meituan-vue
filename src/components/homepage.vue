@@ -169,28 +169,37 @@ export default {
           text-align: left;
           line-height:100/@baserem;
           width:100%;
+          position: relative;
           padding:0 25/@baserem;
-          background:url(../images/img/downArr.png) no-repeat right center;
+
+          span{
+            position: absolute;
+            width:22/@baserem;
+            height:36/@baserem;
+            right:0;
+            top:50%;
+            margin-top:-0.28rem;
+            background:#fff url(../images/img/downArr.png) no-repeat center center;
+            background-size: 100% 100%;
+            }
           }
         }
       .search{
         width:408/@baserem;
         height:64/@baserem;
-        margin:0.24rem 0.2rem 0 0.2rem;
+        margin:0.28rem 0.2rem 0 0.2rem;
         position: relative;
         background:@blueBase;
         input{
-          position: absolute;
-          left: 0;
-          top:0;
+          box-sizing: border-box;
           width:100%;
           height: 100%;
           background: rgba(0,0,0,.15);
           border-radius: 0.2rem;
-          vertical-align: middle;
           font-size:28/@baserem;
           color:#68dbce;
-          text-indent: 1rem;
+          padding-left: 1rem;
+          border:0;
         }
         i{
           width:26/@baserem;
@@ -218,7 +227,7 @@ export default {
         }
         p{
           width:100%;
-          margin-top:8px;
+          margin-top:5px;
           font-size: 24/@baserem;
           text-align: center;
         }

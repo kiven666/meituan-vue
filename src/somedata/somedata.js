@@ -2,7 +2,7 @@
 export var falseBussinessbrief = [
   {
     'shop_name': '正新鸡排', // 店名
-    'img':'../images/img/huangbo.png',
+    'img':'../static/img/huangbo.jpg',
     'price':9.5,
     'markprice':20,
     'sale':14224212,
@@ -24,7 +24,7 @@ export var falseBussinessbrief = [
   },
   {
     'shop_name': '遇见小面', // 店名
-    'img':'../images/img/mian.png',
+    'img':'../static/img/xiaomian.jpg',
     'price':9.99,
     'markprice':15,
     'sale':71202,
@@ -46,7 +46,7 @@ export var falseBussinessbrief = [
   },
   {
     'shop_name': '皇冠·玛丽奥',
-    'img':'../images/img/maliao.png',
+    'img':'../static/img/maliao.jpg',
     'price':15.8,
     'markprice':20,
     'sale':458214,
@@ -68,7 +68,7 @@ export var falseBussinessbrief = [
   },
   {
     'shop_name': 'Regiustea天御皇茶',
-    'img':'../images/img/tea.png',
+    'img':'../../static/img/tea.jpg',
     'price':15.8,
     'markprice':21,
     'sale':196253,
@@ -91,7 +91,7 @@ export var falseBussinessbrief = [
   {
     'shop_name': '老鸭粉丝汤',
     'id': 's10005',
-    'img':'../images/img/soup.png',
+    'img':'../../static/img/duck.jpg',
     'price':15.9,
     'markprice':19,
     'sale':1221,

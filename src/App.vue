@@ -16,7 +16,12 @@
     name: 'app',
     data(){
       return {
-        isLoading:true
+        
+      }
+    },
+    computed:{
+      isLoading(){
+        return this.$store.getters.getLoading;
       }
     }
   }
@@ -27,7 +32,7 @@
   @import './css/common.css'; 
 
   body{
-    background: #F4F4F4;
+    background: #f0efed;
   }
   .loading_jump{
     width:1rem;

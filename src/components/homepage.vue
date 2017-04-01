@@ -1,4 +1,5 @@
 <template>
+
   <div class="index_main" v-if='showMe'>
     <!-- //头部 -->
     <div class="index_header">
@@ -15,11 +16,18 @@
         <p>我 的</p>
       </div>
     </div>
+    <!-- 下载 图片 -->
+    <div class="download">
+      <router-link to="/">
+        <img src="../images/img/download.jpg">
+      </router-link>
+    </div>
 
     <div class="index_banner">
-      <Swipe class='my-swiper'> <!-- 取消自动轮播 -->
+
+      <Swipe class="my-swipe" :auto="0"><!-- swipe 设置不自动滚动 -->
         <Swipe-item class="slide slide1">
-          <router-link to='/search/美食'>
+          <router-link to="/search/美食">
             <div class="common_slider">
               <img src="../images/slider-pic/slider-pic1.jpeg" alt="">
               <p>美食</p>
@@ -122,25 +130,132 @@
       </Swipe>
 
     </div>
+    <!-- 一个列表 -->
+    <div class="someList">
+      <section class="left_list">
+        <dl>
+          <dt>
+            <h3>我们约吧</h3>
+            <p>恋人家人好朋友</p>
+          </dt>
+          <dd><img src="../images/img/lovers.png"></dd>
+        </dl>
+      </section>
+      <section class="right_list">
+        <div class="list_top">
+          <dl>
+            <dt>
+              <h3>超低价格</h3>
+              <p>十元惠生活</p>
+            </dt>
+            <dd><img src="../images/img/hamburger.jpg"></dd>
+          </dl>
+        </div>
+        <div class="list_bottom">
+          <section>
+            <dl>
+              <dt>
+                <h3>逛街必备</h3>
+                <p>甜点奶茶随手找</p>
+              </dt>
+              <dd><img src="../images/img/coffee.png"></dd>
+            </dl>
+          </section>
+          <section>
+            <dl>
+              <dt>
+                <h3 class="color_ano">名店抢购</h3>
+                <p>距离结束</p>
+              </dt>
+              <dd><span>{{content.hour}}</span>:<span>{{content.minutes}}</span>:<span>{{content.second}}</span></dd>
+            </dl>
+          </section>
+        </div>
+      </section>
+    </div>
 
+    <div class="main_content">
+      <h3>猜你喜欢</h3>
+      <oneShop v-for='n in getFalseBussinessbrief' :aitem='n' :key='n'></oneShop>
+  
+
+    </div>
 
   </div>
 </template>
 
 <script>
 import { Swipe, SwipeItem } from 'vue-swipe';
+import oneShop from './tpl/one_shop'
+import { mapGetters } from 'vuex';
 
 export default {
 
   name: 'hello',
   data () {
     return {
-      showMe:true
+      showMe:false,
+      sexteen_slider: '',
+      content:{}
+    }
+  },
+  mounted(){
+    // 设置当前状态为加载中
+    this.$store.dispatch('setLoading',true);
+    //设置当前页面标记为首页
+    this.$store.dispatch('setWhichpage','homepage')
+
+    var time = Math.floor(Math.random()*2000);
+    console.log('模拟加载用时: ' + time)
+    setInterval(() => {
+      this.$store.dispatch('setLoading',false);
+      this.showMe = true;
+    },time)
+
+    this.countdowm('2017-4-12 9:40:20');  //设置活动结束时间
+  },
+  computed:{
+    ...mapGetters([
+      'getLogin',
+      'getFalseBussinessbrief' // 商家简略信息
+    ])
+  },
+  methods:{
+    //倒计时
+    countdowm(endtime){
+      let self = this;
+      let timer = setInterval(() =>{
+        let nowTime = Date.parse(new Date())/1000;
+        let stopTime1 = Date.parse(endtime)/1000;
+        let allSecond = stopTime1 - nowTime;
+        if(allSecond > 0){
+          let hour = Math.floor(allSecond/3600);
+          let minutes = Math.floor(allSecond%3600/60);
+          let second = Math.floor(allSecond%3600%60);
+          hour = hour < 10? '0' + hour : hour;
+          minutes = minutes < 10? '0' + minutes : minutes;
+          second = second < 10? '0' + second :second
+          self.content = {
+           hour:hour,
+           minutes:minutes,
+           second:second
+          }; 
+        }else{
+          self.content = {
+            hour:'00',
+            minutes:'00',
+            second:'00'
+          }
+        }
+      },1000)
+      
+
     }
   },
   components:{
     Swipe,
-    SwipeItem
+    SwipeItem,
+    oneShop
   }
 }
 </script>
@@ -152,6 +267,7 @@ export default {
   .index_main{
     overflow: hidden;
     width:640/@baserem;
+    /*头部搜索区域*/
     .index_header{
       border-bottom:1px solid #ccc;
       background:@blueBase;
@@ -234,10 +350,12 @@ export default {
       }
 
     }
+    /*可滑动菜单列表*/
     .index_banner{
       height:4.6rem;
       background:#fff;
       margin-bottom:0.2rem;
+      border-bottom:1px solid #ddd8ce;
       .common_slider{
         width:2.5rem;
         height:2rem;
@@ -256,17 +374,126 @@ export default {
         }
       }
     }
+    /* 下载app */
+    .download{
+      height:100/@baserem;
+      img{
+        width:100%;
+      }
+    }
+    /*中间列表*/
+    .someList{
+      height:5rem;
+      margin:0.4rem 0;
+      padding:12/@baserem;
+      display: flex;
+      background:#fff;
+      border-top:1px solid #DDD8CE;
+      border-bottom:1px solid #DDD8CE;
+      .left_list{
+        flex:1;
+        border-right:1px solid #ddd8ce;
+        padding-left: 16/@baserem;
+        h3{
+          font-size: 30/@baserem;
+          color:#55a40f;
+          margin:20/@baserem 0;
+        }
+        p{
+          color:#666;
+          font-size:24/@baserem;
+        }
+      }
+      .right_list{
+        flex:2;
+        div.list_top{
+          height:50%;
+          border-bottom:1px solid #ddd8ce;
+          dl{
+            height:100%;
+            dt{
+              width:170/@baserem;
+              float:left;
+              margin-left:40/@baserem;
+              height:100%;
+              h3{
+                font-size: 30/@baserem;
+                color:#ff3f0d;
+                margin:20/@baserem 0;
+              }
+              p{
+                color:#666;
+                font-size:24/@baserem;
+              }
+            }
+            dd{
+              display: inline-block;
+            }
+          }
+        }
+        div.list_bottom{
+          display: flex;
+          section{
+            box-sizing: border-box;
+            padding-left: 18/@baserem;
+            flex:1;
+            border-left: 1px solid #DDD8CE;
+            h3{
+              font-size: 30/@baserem;
+              color:#f742a0;
+              margin-bottom:10/@baserem; 
+            }
+            h3.color_ano{
+              color:#ff8601;
+            }
+            p{
+              color:#666;
+              font-size:24/@baserem;
+            }
+            dd{
+              font-size:24/@baserem;
+              height:80/@baserem;
+              text-align: left;
+              img{
+                width: 80/@baserem;
+                height:80/@baserem;
+                margin-left:40/@baserem;
+              }
+              span{
+                display: inline-block;
+                width:40/@baserem;
+                height:30/@baserem;
+                background:#4C4C4C;
+                border-radius: 6/@baserem;
+                color:#fff;
+                font-size: 24/@baserem;
+                margin-top:20px;
+                text-align: center;
+                line-height:30/@baserem;
+              }
+            }
+          }
+        }
+      }
+    }
+    .main_content{
+      background:#fff;
+      padding-left:20/@baserem;
+      h3{
+        padding:28/@baserem 20/@baserem;
+        color:#666;
+        font-weight:normal;
+        font-size: 34/@baserem;
+      }
+    }
     
-
   }
-/*swipe插件改写*/
-/* slider插件css + 改写*/
-.mint-swipe,.mint-swipe-items-wrap{overflow:hidden;position:relative;height:100%}
-.mint-swipe-items-wrap>div{position:absolute;-webkit-transform:translateX(-100%);transform:translateX(-100%);width:100%;height:100%;display:none}
-.mint-swipe-items-wrap>div.is-active{display:block;-webkit-transform:none;transform:none}
-.mint-swipe-indicators{position:absolute;bottom:10px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}
-.mint-swipe-indicator{width:.1rem;height:.1rem;display:inline-block;border-radius:50%;background:#ccc;margin:0 3px}
-.mint-swipe-indicator.is-active{background:@blueBase}
-
-  
+  /*swipe插件改写*/
+  /* slider插件css + 改写*/
+  .mint-swipe,.mint-swipe-items-wrap{overflow:hidden;position:relative;height:100%}
+  .mint-swipe-items-wrap>div{position:absolute;-webkit-transform:translateX(-100%);transform:translateX(-100%);width:100%;height:100%;display:none}
+  .mint-swipe-items-wrap>div.is-active{display:block;-webkit-transform:none;transform:none}
+  .mint-swipe-indicators{position:absolute;bottom:10px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}
+  .mint-swipe-indicator{width:.1rem;height:.1rem;display:inline-block;border-radius:50%;background:#ccc;margin:0 3px}
+  .mint-swipe-indicator.is-active{background:@blueBase}
 </style>

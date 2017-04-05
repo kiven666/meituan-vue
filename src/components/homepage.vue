@@ -178,8 +178,9 @@
       <h3>猜你喜欢</h3>
       <oneShop v-for='n in getFalseBussinessbrief' :aitem='n' :key='n'></oneShop>
   
-
     </div>
+
+    
 
   </div>
 </template>
@@ -196,7 +197,8 @@ export default {
     return {
       showMe:false,
       sexteen_slider: '',
-      content:{}
+      content:{},
+      isLoadMore:false  //是否加载更多
     }
   },
   mounted(){
@@ -205,14 +207,19 @@ export default {
     //设置当前页面标记为首页
     this.$store.dispatch('setWhichpage','homepage')
 
-    var time = Math.floor(Math.random()*2000);
+    let time = Math.floor(Math.random()*2000);
     console.log('模拟加载用时: ' + time)
     setInterval(() => {
       this.$store.dispatch('setLoading',false);
       this.showMe = true;
     },time)
 
-    this.countdowm('2017-4-12 9:40:20');  //设置活动结束时间
+    //滚动加载更多触发
+    setTimeout( () => {
+      window.addEventListener('scroll',this.dispatchLoad,false)
+    },0)
+
+    this.countdowm('2017-4-7 9:40:20');  //设置活动结束时间
   },
   computed:{
     ...mapGetters([
@@ -248,9 +255,32 @@ export default {
           }
         }
       },1000)
-      
+    },
 
+    dispatchLoad (){
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var offsetHeight = document.documentElement.offsetHeight || document.body.offsetHeight;
+      if((scrollTop + window.innerHeight) >= offsetHeight){
+        console.log('加载更多触发。')
+        this.loadMore();
+      }
+    },
+    //加载更多方法
+    loadMore (){
+      if(this.getFalseBussinessbrief.length >20) return;
+      //加载动画设置为true
+      this.$store.dispatch('setLoading',true);
+      if(!this.isLoadMore){  //!不是非么？？？
+        setTimeout( () => {
+          this.$store.dispatch('setLoading',false);
+          if(this.getFalseBussinessbrief.length <= 20){
+            this.$store.dispatch('setHomepageMore',[...this.getFalseBussinessbrief,...(this.getFalseBussinessbrief).slice(0,5)])
+          }
+          this.isLoadMore = false;
+        },1500)
+      }
     }
+
   },
   components:{
     Swipe,
@@ -305,15 +335,15 @@ export default {
         height:64/@baserem;
         margin:0.28rem 0.2rem 0 0.2rem;
         position: relative;
-        background:@blueBase;
+        /*background:@blueBase;*/
+        background: rgba(0,0,0,.15);
+        border-radius: 0.2rem;
         input{
           box-sizing: border-box;
           width:100%;
           height: 100%;
-          background: rgba(0,0,0,.15);
           border-radius: 0.2rem;
           font-size:28/@baserem;
-          color:#68dbce;
           padding-left: 1rem;
           border:0;
         }
@@ -403,6 +433,14 @@ export default {
           color:#666;
           font-size:24/@baserem;
         }
+        dd{
+          width:166/@baserem;
+          height:166/baserem;
+          img{
+            width:100%;
+            height:100%;
+          }
+        }
       }
       .right_list{
         flex:2;
@@ -428,6 +466,11 @@ export default {
             }
             dd{
               display: inline-block;
+              width:130/@baserem;
+              height:130/@baserem;
+              img{
+                height:100%;
+              }
             }
           }
         }
